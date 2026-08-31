@@ -1,7 +1,10 @@
-# Publishes the static site to GitHub Pages. There is no build step — the repo
-# root is the site — so the job just uploads it. `enablement: true` switches
-# Pages on the first time this runs, so no manual repository setting is needed.
-name: Deploy to GitHub Pages
+# Keeps the `gh-pages` branch in sync with `main`, which is what GitHub Pages
+# serves. This deliberately avoids the Pages REST API: the workflow token is not
+# allowed to create a Pages site on this repository, but it can push a branch,
+# and a branch is all Pages needs once the source is set to gh-pages.
+#
+# There is no build step — the repo root is the site.
+name: Publish to GitHub Pages
 
 on:
   push:
@@ -9,30 +12,28 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
-  group: pages
-  cancel-in-progress: true
+  group: gh-pages
+  cancel-in-progress: false
 
 jobs:
-  deploy:
+  publish:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/configure-pages@v5
-        with:
-          enablement: true
+      - name: Assemble the published tree
+        run: |
+          rm -rf .github
+          touch .nojekyll
 
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: .
-
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Force-push it to gh-pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan gh-pages-build
+          git add -A
+          git commit -q -m "Publish ${GITHUB_SHA:0:7}"
+          git push --force origin gh-pages-build:gh-pages
