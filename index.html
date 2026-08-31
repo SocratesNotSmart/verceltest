@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>ZTL Radaras — Italijos ribojamo eismo zonos</title>
+<meta name="description" content="Interaktyvus žemėlapis, kuris seka tavo vietą Italijoje ir įspėja prieš įvažiuojant į ZTL (ribojamo eismo) zoną.">
+<meta name="theme-color" content="#0d1117">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<link rel="stylesheet" href="./vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="./app/styles.css">
+</head>
+<body data-status="idle" data-tracking="off">
+
+  <div id="map"></div>
+
+  <header id="banner">
+    <h1 id="app-name" class="sr-only">ZTL Radaras</h1>
+    <div class="banner-main">
+      <div class="pulse"></div>
+      <div class="banner-text">
+        <strong id="banner-title">Sekimas išjungtas</strong>
+        <span id="banner-detail"></span>
+      </div>
+    </div>
+    <div id="stats"></div>
+  </header>
+
+  <button id="recenter" class="round hidden" title="Centruoti" aria-label="Centruoti">
+    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+      <path fill="currentColor" d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm8.94 3A9 9 0 0 0 13 3.06V1h-2v2.06A9 9 0 0 0 3.06 11H1v2h2.06A9 9 0 0 0 11 20.94V23h2v-2.06A9 9 0 0 0 20.94 13H23v-2ZM12 19a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"/>
+    </svg>
+  </button>
+
+  <footer id="dock">
+    <div class="dock-head">
+      <h2 id="nearby-title">Zonos netoliese</h2>
+      <span id="data-status"></span>
+    </div>
+    <ul id="zone-list"></ul>
+    <div class="dock-actions">
+      <button id="toggle" class="primary">Pradėti sekimą</button>
+      <button id="settings-btn" class="round" title="Nustatymai" aria-label="Nustatymai">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path fill="currentColor" d="M19.14 12.94a7.07 7.07 0 0 0 0-1.88l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.03 7.03 0 0 0-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.58.24-1.12.55-1.62.94l-2.39-.96a.5.5 0 0 0-.6.22L2.67 8.84a.5.5 0 0 0 .12.64l2.03 1.58a7.07 7.07 0 0 0 0 1.88l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.13.22.39.31.6.22l2.39-.96c.5.39 1.04.7 1.62.94l.36 2.54c.04.24.25.42.5.42h3.84c.25 0 .46-.18.5-.42l.36-2.54c.58-.24 1.12-.55 1.62-.94l2.39.96c.22.09.47 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64ZM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7Z"/>
+        </svg>
+      </button>
+    </div>
+  </footer>
+
+  <section id="sheet" aria-live="polite">
+    <div class="sheet-head">
+      <h3 id="sheet-title"></h3>
+      <button id="sheet-close" aria-label="Uždaryti">✕</button>
+    </div>
+    <div id="sheet-body"></div>
+  </section>
+
+  <div id="toast" role="status"></div>
+
+  <script src="./vendor/leaflet/leaflet.js"></script>
+  <script type="module" src="./app/main.js"></script>
+</body>
+</html>
